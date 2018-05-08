@@ -13,6 +13,7 @@
 		"url": "https://github.com/Vlitude/VI-Promotion-Bot/issues"
 	},
 	"dependencies": {
+		"express": "^4.16.3",
 		"noblox.js": "^4.1.1"
 	}
 }

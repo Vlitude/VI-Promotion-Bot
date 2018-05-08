@@ -1,14 +1,10 @@
-const http = require("http2");
+const express = require("express");
+const app = express();
 
-const HTTP_OPTIONS = {
-	allowHTTP1: true
-};
+const PORT = process.env.PORT || 8080;
 
-const server = http.createSecureServer(HTTP_OPTIONS);
+app.get("/", (req, res) => {
+	res.status(503).end();
+})
 
-server.on("request", (request, response) => {
-	response.statusCode = 503;
-	response.end();
-});
-
-server.listen(process.env.PORT || 8080);
+app.listen(PORT, () => console.log(`Server started on port ${PORT}.`));
