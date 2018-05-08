@@ -1,9 +1,12 @@
 {
-	"name": "Promotion Bot",
+	"name": "Promotion-Bot",
 	"homepage": "https://www.roblox.com/groups/group.aspx?gid=3180206",
 	"description": "A Roblox group credits system for promoting members.",
 	"license": "UNLICENSED",
 	"main": "index.js",
+	"scripts": {
+		"newkey": "node newkey.js"
+	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/Vlitude/VI-Promotion-Bot.git"
