@@ -1,0 +1,17 @@
+{
+	"name": "Promotion Bot",
+	"description": "A Roblox group credits system for promoting members.",
+	"license": "UNLICENSED",
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Vlitude/VI-Promotion-Bot.git"
+	},
+	"author": "Colton Loewen",
+	"bugs": {
+		"url": "https://github.com/Vlitude/VI-Promotion-Bot/issues"
+	},
+	"dependencies": {
+		"noblox.js": "^4.1.1"
+	}
+}
