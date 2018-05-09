@@ -20,11 +20,19 @@ function getRequirements() {
 			group.password = match[2];
 			group.ranks = entry.substring(match[0].length).split(RANK_SEP).map((rank) => {
 				var details = rank.split(RANK_DETAIL_SEP);
-				return {name: details[0], credits: parseInt(details[1], 10)};
+				return {rank: details[0], credits: parseInt(details[1], 10)};
+			});
+			group.ranks.sort((a, b) => {
+				return a.credits < b.credits ? -1 : 1;
 			});
 			reqs[match[3]] = group;
 		}
 	});
+	console.log(reqs);
+}
+
+function obfuscate(match) {
+	return "#".repeat(match.length);
 }
 
 router.use((req, res, next) => {
@@ -49,8 +57,34 @@ router.get("/requirements", (req, res) => {
 	}
 });
 
+/** Sets the users rank to the rank that they have enough credits for, if not their current rank. */
 router.post("/promote", (req, res) => {
-	res.status(503).end();
+	var details, oldRank, newRank;
+	var group = req.params.group;
+	var user = req.params.user;
+	var newCredits = req.params.credits;
+
+	if (process.env.REQUIREMENTS !== reqsInput)
+		getRequirements();
+
+	details = reqs[group];
+	try {
+		roblox.login(details.username, reqs[group].password);
+		newCredits = parseInt(newCredits);
+		for (var [rank, credits] of reqs[group].ranks) {
+			if (newCredits < credits)
+				break;
+			newRank = rank;
+		}
+		oldRank = roblox.getRankInGroup(group, user);
+		if (oldRank !== newRank)
+			console.log("promoted to " + newRank); // roblox.setRank(group, user, newRank); // Disabled while testing.
+		res.send("true");
+	} catch (exc) {
+		console.warn("Unable to promote user: " + exc.stack);
+		res.send("false," + exc.message
+			.replace(details.username, obfuscate).replace(details.password, obfuscate));
+	}
 });
 
 module.exports = router;
