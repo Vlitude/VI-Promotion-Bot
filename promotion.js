@@ -1,4 +1,5 @@
 const express = require("express");
+const roblox = require("noblox");
 const router = express.Router();
 var reqsInput = null;
 var reqs;
@@ -36,6 +37,7 @@ router.use((req, res, next) => {
 	}
 });
 
+/** Returns rank requirements for the group. */
 router.get("/requirements", (req, res) => {
 	if (process.env.REQUIREMENTS !== reqsInput)
 		getRequirements();
@@ -45,6 +47,10 @@ router.get("/requirements", (req, res) => {
 	} else {
 		res.status(404).end();
 	}
+});
+
+router.post("/promote", (req, res) => {
+	res.status(503).end();
 });
 
 module.exports = router;
