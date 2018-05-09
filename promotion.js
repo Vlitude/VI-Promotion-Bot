@@ -23,7 +23,7 @@ function getRequirements() {
 				return {rank: details[0], credits: parseInt(details[1], 10)};
 			});
 			group.ranks.sort((a, b) => {
-				return a.credits < b.credits ? -1 : 1;
+				return a.credits > b.credits ? -1 : 1;
 			});
 			reqs[match[3]] = group;
 		}
@@ -72,9 +72,11 @@ router.post("/promote", (req, res) => {
 		roblox.login(details.username, reqs[group].password);
 		newCredits = parseInt(newCredits);
 		for (var [rank, credits] of reqs[group].ranks) {
-			if (newCredits < credits)
+			if (newCredits >= credits) {
+				newRank = rank;
+			} else {
 				break;
-			newRank = rank;
+			}
 		}
 		oldRank = roblox.getRankInGroup(group, user);
 		if (oldRank !== newRank)
