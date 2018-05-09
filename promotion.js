@@ -31,10 +31,6 @@ function getRequirements() {
 	console.log(reqs);
 }
 
-function obfuscate(match) {
-	return "#".repeat(match.length);
-}
-
 router.use((req, res, next) => {
 	if (process.env.TOKEN == null)
 		console.warn("A token was not set! The request will be authorized.");
@@ -79,13 +75,16 @@ router.post("/promote", (req, res) => {
 			}
 		}
 		oldRank = roblox.getRankInGroup(group, user);
-		if (oldRank !== newRank)
+		if (oldRank !== newRank) {
 			console.log("promoted to " + newRank); // roblox.setRank(group, user, newRank); // Disabled while testing.
-		res.send("true");
+			res.json({promoted: true});
+		} else {
+			res.json({promoted: false});
+		}
+		
 	} catch (exc) {
 		console.warn("Unable to promote user: " + exc.stack);
-		res.send("false," + exc.message
-			.replace(details.username, obfuscate).replace(details.password, obfuscate));
+		res.status(500).json({promoted: false});
 	}
 });
 
