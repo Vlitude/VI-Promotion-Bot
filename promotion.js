@@ -3,9 +3,6 @@ const router = express.Router();
 var reqsInput = null;
 var reqs;
 
-process.env.REQUIREMENTS = "cjcool:SECRET@494072,rank1:5,rank2:10;cjcoolOther:SECRET2@3599691,role1:15";
-
-const TOKEN = process.env.TOKEN;
 const SEP = ";";
 const RANK_SEP = ",";
 const RANK_DETAIL_SEP = ":";
@@ -30,7 +27,9 @@ function getRequirements() {
 }
 
 router.use((req, res, next) => {
-	if (req.query.token === TOKEN) {
+	if (process.env.TOKEN == null)
+		console.warn("A token was not set! The request will be authorized.");
+	if (req.query.token === process.env.TOKEN) {
 		next();
 	} else {
 		res.status(401).end();
@@ -38,11 +37,14 @@ router.use((req, res, next) => {
 });
 
 router.get("/requirements", (req, res) => {
-	res.send("authenticated!");
 	if (process.env.REQUIREMENTS !== reqsInput)
 		getRequirements();
 
-
+	if (typeof req.query.group === "string" && reqs[req.query.group] != null) {
+		res.json(reqs[req.query.group].ranks);
+	} else {
+		res.status(404).end();
+	}
 });
 
 module.exports = router;
