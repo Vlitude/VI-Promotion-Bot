@@ -63,11 +63,11 @@ router.post("/promote", (req, res) => {
 	if (process.env.REQUIREMENTS !== reqsInput)
 		getRequirements();
 
-	details = reqs[group];
 	try {
-		roblox.login(details.username, reqs[group].password);
+		details = reqs[group];
+		roblox.login(details.username, details.password);
 		newCredits = parseInt(newCredits);
-		for (var [rank, credits] of reqs[group].ranks) {
+		for (var [rank, credits] of details.ranks) {
 			if (newCredits >= credits) {
 				newRank = rank;
 			} else {
